@@ -72,7 +72,7 @@ def lambda_handler(event, context):
         
         # invoke_model用のリクエストペイロード
         request_payload = {
-            "prompt": bedrock_messages,
+            "prompt": message,
             "max_new_tokens": 512,
             "do_sample": True,
             "temperature": 0.7,
