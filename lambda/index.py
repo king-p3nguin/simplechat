@@ -59,9 +59,9 @@ def lambda_handler(event, context):
         bedrock_messages = []
         for msg in messages:
             if msg["role"] == "user":
-                bedrock_messages += f"User: {msg["content"]}\n"
+                bedrock_messages += f'User: {msg["content"]}\n'
             elif msg["role"] == "assistant":
-                bedrock_messages += f"Assistant: {msg["content"]}\n"
+                bedrock_messages += f'Assistant: {msg["content"]}\n'
         
         # invoke_model用のリクエストペイロード
         request_payload = {
