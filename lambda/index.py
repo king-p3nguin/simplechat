@@ -19,7 +19,7 @@ from botocore.exceptions import ClientError
 # bedrock_client = None
 
 # モデルID
-MODEL_ID = os.environ.get("MODEL_ID", "us.amazon.nova-lite-v1:0")
+# MODEL_ID = os.environ.get("MODEL_ID", "us.amazon.nova-lite-v1:0")
 
 def lambda_handler(event, context):
     try:
@@ -44,7 +44,7 @@ def lambda_handler(event, context):
         conversation_history = body.get('conversationHistory', [])
         
         print("Processing message:", message)
-        print("Using model:", MODEL_ID)
+        # print("Using model:", MODEL_ID)
         
         # 会話履歴を使用
         messages = conversation_history.copy()
@@ -55,24 +55,17 @@ def lambda_handler(event, context):
             "content": message
         })
         
-        # Nova Liteモデル用のリクエストペイロードを構築
-        # 会話履歴を含める
+        # 会話履歴を含めたプロンプトを作成
         bedrock_messages = []
         for msg in messages:
             if msg["role"] == "user":
-                bedrock_messages.append({
-                    "role": "user",
-                    "content": [{"text": msg["content"]}]
-                })
+                bedrock_messages += f"User: {msg["content"]}\n"
             elif msg["role"] == "assistant":
-                bedrock_messages.append({
-                    "role": "assistant", 
-                    "content": [{"text": msg["content"]}]
-                })
+                bedrock_messages += f"Assistant: {msg["content"]}\n"
         
         # invoke_model用のリクエストペイロード
         request_payload = {
-            "prompt": message,
+            "prompt": bedrock_messages + "Assistant:",
             "max_new_tokens": 512,
             "do_sample": True,
             "temperature": 0.7,
