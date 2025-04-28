@@ -56,7 +56,7 @@ def lambda_handler(event, context):
         })
         
         # 会話履歴を含めたプロンプトを作成
-        bedrock_messages = ""
+        bedrock_messages = "The following is a conversation between a user and an assistant.\n\n"
         for msg in messages:
             if msg["role"] == "user":
                 bedrock_messages += f'User: {msg["content"]}\n'
@@ -65,14 +65,14 @@ def lambda_handler(event, context):
         
         # invoke_model用のリクエストペイロード
         request_payload = {
-            "prompt": bedrock_messages + "Assistant:",
+            "prompt": bedrock_messages + "Assistant: ",
             "max_new_tokens": 512,
             "do_sample": True,
             "temperature": 0.7,
             "top_p": 0.9
         }
         
-        print("Calling Bedrock invoke_model API with payload:", json.dumps(request_payload))
+        print("Calling API with payload:", json.dumps(request_payload))
         
         # APIを呼び出し
         req = urllib.request.Request(
@@ -91,7 +91,7 @@ def lambda_handler(event, context):
             response_body = response.read()
             # JSONにパース
             parsed_body = json.loads(response_body.decode('utf-8'))
-            print("Bedrock response:", json.dumps(parsed_body, default=str, indent=2))
+            print("API response:", json.dumps(parsed_body, default=str, indent=2))
         
         # 応答の検証
         if not parsed_body.get('generated_text'):
