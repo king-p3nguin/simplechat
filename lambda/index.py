@@ -101,11 +101,11 @@ def lambda_handler(event, context):
             print("Bedrock response:", json.dumps(parsed_body, default=str, indent=2))
         
         # 応答の検証
-        if not response_body.get('generated_text'):
+        if not parsed_body.get('generated_text'):
             raise Exception("No response content from the model")
         
         # アシスタントの応答を取得
-        assistant_response = response_body['generated_text']
+        assistant_response = parsed_body['generated_text']
         
         # アシスタントの応答を会話履歴に追加
         messages.append({
