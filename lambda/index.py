@@ -56,7 +56,7 @@ def lambda_handler(event, context):
         })
         
         # 会話履歴を含めたプロンプトを作成
-        bedrock_messages = []
+        bedrock_messages = ""
         for msg in messages:
             if msg["role"] == "user":
                 bedrock_messages += f'User: {msg["content"]}\n'
